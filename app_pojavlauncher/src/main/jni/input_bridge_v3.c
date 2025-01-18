@@ -26,13 +26,9 @@
 #define EVENT_TYPE_CHAR 1000
 #define EVENT_TYPE_CHAR_MODS 1001
 #define EVENT_TYPE_CURSOR_ENTER 1002
-#define EVENT_TYPE_FRAMEBUFFER_SIZE 1004
 #define EVENT_TYPE_KEY 1005
 #define EVENT_TYPE_MOUSE_BUTTON 1006
 #define EVENT_TYPE_SCROLL 1007
-#define EVENT_TYPE_WINDOW_SIZE 1008
-
-jint (*orig_ProcessImpl_forkAndExec)(JNIEnv *env, jobject process, jint mode, jbyteArray helperpath, jbyteArray prog, jbyteArray argBlock, jint argc, jbyteArray envBlock, jint envc, jbyteArray dir, jintArray std_fds, jboolean redirectErrorStream);
 
 static void registerFunctions(JNIEnv *env);
 
@@ -52,7 +48,8 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         (*vm)->GetEnv(vm, (void**) &solcraft_environ->runtimeJNIEnvPtr_JRE, JNI_VERSION_1_4);
         solcraft_environ->vmGlfwClass = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->NewGlobalRef(solcraft_environ->runtimeJNIEnvPtr_JRE, (*solcraft_environ->runtimeJNIEnvPtr_JRE)->FindClass(solcraft_environ->runtimeJNIEnvPtr_JRE, "org/lwjgl/glfw/GLFW"));
         solcraft_environ->method_glftSetWindowAttrib = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->GetStaticMethodID(solcraft_environ->runtimeJNIEnvPtr_JRE, solcraft_environ->vmGlfwClass, "glfwSetWindowAttrib", "(JII)V");
-        solcraft_environ->method_internalWindowSizeChanged = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->GetStaticMethodID(solcraft_environ->runtimeJNIEnvPtr_JRE, solcraft_environ->vmGlfwClass, "internalWindowSizeChanged", "(JII)V");
+        solcraft_environ->method_internalWindowSizeChanged = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->GetStaticMethodID(solcraft_environ->runtimeJNIEnvPtr_JRE, solcraft_environ->vmGlfwClass, "internalWindowSizeChanged", "(J)V");
+        solcraft_environ->method_internalChangeMonitorSize = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->GetStaticMethodID(solcraft_environ->runtimeJNIEnvPtr_JRE, solcraft_environ->vmGlfwClass, "internalChangeMonitorSize", "(II)V");
         jfieldID field_keyDownBuffer = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->GetStaticFieldID(solcraft_environ->runtimeJNIEnvPtr_JRE, solcraft_environ->vmGlfwClass, "keyDownBuffer", "Ljava/nio/ByteBuffer;");
         jobject keyDownBufferJ = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->GetStaticObjectField(solcraft_environ->runtimeJNIEnvPtr_JRE, solcraft_environ->vmGlfwClass, field_keyDownBuffer);
         solcraft_environ->keyDownBuffer = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->GetDirectBufferAddress(solcraft_environ->runtimeJNIEnvPtr_JRE, keyDownBufferJ);
@@ -60,7 +57,7 @@ jint JNI_OnLoad(JavaVM* vm, __attribute__((unused)) void* reserved) {
         jobject mouseDownBufferJ = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->GetStaticObjectField(solcraft_environ->runtimeJNIEnvPtr_JRE, solcraft_environ->vmGlfwClass, field_mouseDownBuffer);
         solcraft_environ->mouseDownBuffer = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->GetDirectBufferAddress(solcraft_environ->runtimeJNIEnvPtr_JRE, mouseDownBufferJ);
         hookExec();
-        installLinkerBugMitigation();
+        installLwjglDlopenHook();
         installEMUIIteratorMititgation();
     }
 
@@ -86,29 +83,26 @@ ADD_CALLBACK_WWIN(Char)
 ADD_CALLBACK_WWIN(CharMods)
 ADD_CALLBACK_WWIN(CursorEnter)
 ADD_CALLBACK_WWIN(CursorPos)
-ADD_CALLBACK_WWIN(FramebufferSize)
 ADD_CALLBACK_WWIN(Key)
 ADD_CALLBACK_WWIN(MouseButton)
 ADD_CALLBACK_WWIN(Scroll)
-ADD_CALLBACK_WWIN(WindowSize)
 
 #undef ADD_CALLBACK_WWIN
 
-void handleFramebufferSizeJava(long window, int w, int h) {
-    (*solcraft_environ->runtimeJNIEnvPtr_JRE)->CallStaticVoidMethod(solcraft_environ->runtimeJNIEnvPtr_JRE, solcraft_environ->vmGlfwClass, solcraft_environ->method_internalWindowSizeChanged, (long)window, w, h);
+void updateMonitorSize(int width, int height) {
+    (*solcraft_environ->runtimeJNIEnvPtr_JRE)->CallStaticVoidMethod(solcraft_environ->runtimeJNIEnvPtr_JRE, solcraft_environ->vmGlfwClass, solcraft_environ->method_internalChangeMonitorSize, width, height);
+}
+void updateWindowSize(void* window) {
+    (*solcraft_environ->runtimeJNIEnvPtr_JRE)->CallStaticVoidMethod(solcraft_environ->runtimeJNIEnvPtr_JRE, solcraft_environ->vmGlfwClass, solcraft_environ->method_internalWindowSizeChanged, (jlong)window);
 }
 
 void pojavPumpEvents(void* window) {
-    if(solcraft_environ->isPumpingEvents) return;
-    // prevent further calls until we exit the loop
-    // by spec, they will be called on the same thread so no synchronization here
-    solcraft_environ->isPumpingEvents = true;
-
-    if((solcraft_environ->cLastX != solcraft_environ->cursorX || solcraft_environ->cLastY != solcraft_environ->cursorY) && solcraft_environ->GLFW_invoke_CursorPos) {
-        solcraft_environ->cLastX = solcraft_environ->cursorX;
-        solcraft_environ->cLastY = solcraft_environ->cursorY;
+    if(solcraft_environ->shouldUpdateMouse) {
         solcraft_environ->GLFW_invoke_CursorPos(window, floor(solcraft_environ->cursorX),
                                              floor(solcraft_environ->cursorY));
+    }
+    if(solcraft_environ->shouldUpdateMonitorSize) {
+        updateWindowSize(window);
     }
 
     size_t index = solcraft_environ->outEventIndex;
@@ -132,14 +126,6 @@ void pojavPumpEvents(void* window) {
             case EVENT_TYPE_SCROLL:
                 if(solcraft_environ->GLFW_invoke_Scroll) solcraft_environ->GLFW_invoke_Scroll(window, event.i1, event.i2);
                 break;
-            case EVENT_TYPE_FRAMEBUFFER_SIZE:
-                handleFramebufferSizeJava(solcraft_environ->showingWindow, event.i1, event.i2);
-                if(solcraft_environ->GLFW_invoke_FramebufferSize) solcraft_environ->GLFW_invoke_FramebufferSize(window, event.i1, event.i2);
-                break;
-            case EVENT_TYPE_WINDOW_SIZE:
-                handleFramebufferSizeJava(solcraft_environ->showingWindow, event.i1, event.i2);
-                if(solcraft_environ->GLFW_invoke_WindowSize) solcraft_environ->GLFW_invoke_WindowSize(window, event.i1, event.i2);
-                break;
         }
 
         index++;
@@ -148,11 +134,10 @@ void pojavPumpEvents(void* window) {
     }
 
     // The out target index is updated by the rewinder
-    solcraft_environ->isPumpingEvents = false;
 }
 
-/** Setup the amount of event that will get pumped into each window */
-void pojavComputeEventTarget() {
+/** Prepare the library for sending out callbacks to all windows */
+void pojavStartPumping() {
     size_t counter = atomic_load_explicit(&solcraft_environ->eventCounter, memory_order_acquire);
     size_t index = solcraft_environ->outEventIndex;
 
@@ -163,14 +148,37 @@ void pojavComputeEventTarget() {
     // Only accessed by one unique thread, no need for atomic store
     solcraft_environ->inEventCount = counter;
     solcraft_environ->outTargetIndex = targetIndex;
+
+    //PumpEvents is called for every window, so this logic should be there in order to correctly distribute events to all windows.
+    if((solcraft_environ->cLastX != solcraft_environ->cursorX || solcraft_environ->cLastY != solcraft_environ->cursorY) && solcraft_environ->GLFW_invoke_CursorPos) {
+        solcraft_environ->cLastX = solcraft_environ->cursorX;
+        solcraft_environ->cLastY = solcraft_environ->cursorY;
+        solcraft_environ->shouldUpdateMouse = true;
+    }
+    if(solcraft_environ->shouldUpdateMonitorSize) {
+        // Perform a monitor size update here to avoid doing it on every single window
+        updateMonitorSize(solcraft_environ->savedWidth, solcraft_environ->savedHeight);
+        // Mark the monitor size as consumed (since GLFW was made aware of it)
+        solcraft_environ->monitorSizeConsumed = true;
+    }
 }
 
-/** Apply index offsets after events have been pumped */
-void pojavRewindEvents() {
+/** Prepare the library for the next round of new events */
+void pojavStopPumping() {
     solcraft_environ->outEventIndex = solcraft_environ->outTargetIndex;
 
     // New events may have arrived while pumping, so remove only the difference before the start and end of execution
     atomic_fetch_sub_explicit(&solcraft_environ->eventCounter, solcraft_environ->inEventCount, memory_order_acquire);
+    // Make sure the next frame won't send mouse or monitor updates if it's unnecessary
+    solcraft_environ->shouldUpdateMouse = false;
+    // Only reset the update flag if the monitor size was consumed by pojavStartPumping. This
+    // will delay the update to next frame if it had occured between pojavStartPumping and pojavStopPumping,
+    // but it's better than not having it apply at all
+    if(solcraft_environ->shouldUpdateMonitorSize && solcraft_environ->monitorSizeConsumed) {
+        solcraft_environ->shouldUpdateMonitorSize = false;
+        solcraft_environ->monitorSizeConsumed = false;
+    }
+
 }
 
 JNIEXPORT void JNICALL
@@ -218,82 +226,6 @@ void sendData(int type, int i1, int i2, int i3, int i4) {
         solcraft_environ->inEventIndex -= EVENT_WINDOW_SIZE;
 
     atomic_fetch_add_explicit(&solcraft_environ->eventCounter, 1, memory_order_acquire);
-}
-
-/**
- * Hooked version of java.lang.UNIXProcess.forkAndExec()
- * which is used to handle the "open" command.
- */
-jint
-hooked_ProcessImpl_forkAndExec(JNIEnv *env, jobject process, jint mode, jbyteArray helperpath, jbyteArray prog, jbyteArray argBlock, jint argc, jbyteArray envBlock, jint envc, jbyteArray dir, jintArray std_fds, jboolean redirectErrorStream) {
-    char *pProg = (char *)((*env)->GetByteArrayElements(env, prog, NULL));
-
-    // Here we only handle the "xdg-open" command
-    if (strcmp(basename(pProg), "xdg-open") != 0) {
-        (*env)->ReleaseByteArrayElements(env, prog, (jbyte *)pProg, 0);
-        return orig_ProcessImpl_forkAndExec(env, process, mode, helperpath, prog, argBlock, argc, envBlock, envc, dir, std_fds, redirectErrorStream);
-    }
-    (*env)->ReleaseByteArrayElements(env, prog, (jbyte *)pProg, 0);
-
-    Java_org_lwjgl_glfw_CallbackBridge_nativeClipboard(env, NULL, /* CLIPBOARD_OPEN */ 2002, argBlock);
-    return 0;
-}
-
-void hookExec() {
-    jclass cls;
-    orig_ProcessImpl_forkAndExec = dlsym(RTLD_DEFAULT, "Java_java_lang_UNIXProcess_forkAndExec");
-    if (!orig_ProcessImpl_forkAndExec) {
-        orig_ProcessImpl_forkAndExec = dlsym(RTLD_DEFAULT, "Java_java_lang_ProcessImpl_forkAndExec");
-        cls = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->FindClass(solcraft_environ->runtimeJNIEnvPtr_JRE, "java/lang/ProcessImpl");
-    } else {
-        cls = (*solcraft_environ->runtimeJNIEnvPtr_JRE)->FindClass(solcraft_environ->runtimeJNIEnvPtr_JRE, "java/lang/UNIXProcess");
-    }
-    JNINativeMethod methods[] = {
-        {"forkAndExec", "(I[B[B[BI[BI[B[IZ)I", (void *)&hooked_ProcessImpl_forkAndExec}
-    };
-    (*solcraft_environ->runtimeJNIEnvPtr_JRE)->RegisterNatives(solcraft_environ->runtimeJNIEnvPtr_JRE, cls, methods, 1);
-    printf("Registered forkAndExec\n");
-}
-
-/**
- * Basically a verbatim implementation of ndlopen(), found at
- * https://github.com/PojavLauncherTeam/lwjgl3/blob/3.3.1/modules/lwjgl/core/src/generated/c/linux/org_lwjgl_system_linux_DynamicLinkLoader.c#L11
- * The idea is that since, on Android 10 and earlier, the linker doesn't really do namespace nesting.
- * It is not a problem as most of the libraries are in the launcher path, but when you try to run
- * VulkanMod which loads shaderc outside of the default jni libs directory through this method,
- * it can't load it because the path is not in the allowed paths for the anonymous namesapce.
- * This method fixes the issue by being in libpojavexec, and thus being in the classloader namespace
- */
-jlong ndlopen_bugfix(__attribute__((unused)) JNIEnv *env,
-                     __attribute__((unused)) jclass class,
-                     jlong filename_ptr,
-                     jint jmode) {
-    const char* filename = (const char*) filename_ptr;
-    int mode = (int)jmode;
-    return (jlong) dlopen(filename, mode);
-}
-
-/**
- * Install the linker bug mitigation for Android 10 and lower. Fixes VulkanMod crashing on these
- * Android versions due to missing namespace nesting.
- */
-void installLinkerBugMitigation() {
-    if(android_get_device_api_level() >= 30) return;
-    __android_log_print(ANDROID_LOG_INFO, "Api29LinkerFix", "API < 30 detected, installing linker bug mitigation");
-    JNIEnv* env = solcraft_environ->runtimeJNIEnvPtr_JRE;
-    jclass dynamicLinkLoader = (*env)->FindClass(env, "org/lwjgl/system/linux/DynamicLinkLoader");
-    if(dynamicLinkLoader == NULL) {
-        __android_log_print(ANDROID_LOG_ERROR, "Api29LinkerFix", "Failed to find the target class");
-        (*env)->ExceptionClear(env);
-        return;
-    }
-    JNINativeMethod ndlopenMethod[] = {
-            {"ndlopen", "(JI)J", &ndlopen_bugfix}
-    };
-    if((*env)->RegisterNatives(env, dynamicLinkLoader, ndlopenMethod, 1) != 0) {
-        __android_log_print(ANDROID_LOG_ERROR, "Api29LinkerFix", "Failed to register the bugfix method");
-        (*env)->ExceptionClear(env);
-    }
 }
 
 /**
@@ -501,23 +433,15 @@ void noncritical_send_mouse_button(__attribute__((unused)) JNIEnv* env, __attrib
 void critical_send_screen_size(jint width, jint height) {
     solcraft_environ->savedWidth = width;
     solcraft_environ->savedHeight = height;
-    if (solcraft_environ->isInputReady) {
-        if (solcraft_environ->GLFW_invoke_FramebufferSize) {
-            if (solcraft_environ->isUseStackQueueCall) {
-                sendData(EVENT_TYPE_FRAMEBUFFER_SIZE, width, height, 0, 0);
-            } else {
-                solcraft_environ->GLFW_invoke_FramebufferSize((void*) solcraft_environ->showingWindow, width, height);
-            }
-        }
-
-        if (solcraft_environ->GLFW_invoke_WindowSize) {
-            if (solcraft_environ->isUseStackQueueCall) {
-                sendData(EVENT_TYPE_WINDOW_SIZE, width, height, 0, 0);
-            } else {
-                solcraft_environ->GLFW_invoke_WindowSize((void*) solcraft_environ->showingWindow, width, height);
-            }
-        }
-    }
+    // Even if there was call to pojavStartPumping that consumed the size, this call
+    // might happen right after it (or right before pojavStopPumping)
+    // So unmark the size as "consumed"
+    solcraft_environ->monitorSizeConsumed = false;
+    solcraft_environ->shouldUpdateMonitorSize = true;
+    // Don't use the direct updates  for screen dimensions.
+    // This is done to ensure that we have predictable conditions to correctly call
+    // updateMonitorSize() and updateWindowSize() while on the render thread with an attached
+    // JNIEnv.
 }
 
 void noncritical_send_screen_size(__attribute__((unused)) JNIEnv* env, __attribute__((unused)) jclass clazz, jint width, jint height) {
@@ -540,21 +464,42 @@ void noncritical_send_scroll(__attribute__((unused)) JNIEnv* env, __attribute__(
 
 
 JNIEXPORT void JNICALL Java_org_lwjgl_glfw_GLFW_nglfwSetShowingWindow(__attribute__((unused)) JNIEnv* env, __attribute__((unused)) jclass clazz, jlong window) {
-    solcraft_environ->showingWindow = (long) window;
+    solcraft_environ->showingWindow = (jlong) window;
 }
 
 JNIEXPORT void JNICALL Java_org_lwjgl_glfw_CallbackBridge_nativeSetWindowAttrib(__attribute__((unused)) JNIEnv* env, __attribute__((unused)) jclass clazz, jint attrib, jint value) {
-    if (!solcraft_environ->showingWindow || !solcraft_environ->isUseStackQueueCall) {
+    // Check for stack queue no longer necessary here as the JVM crash's origin is resolved
+    if (!solcraft_environ->showingWindow) {
         // If the window is not shown, there is nothing to do yet.
-        // For Minecraft < 1.13, calling to JNI functions here crashes the JVM for some reason, therefore it is skipped for now.
         return;
     }
 
-    (*solcraft_environ->runtimeJNIEnvPtr_JRE)->CallStaticVoidMethod(
-        solcraft_environ->runtimeJNIEnvPtr_JRE,
-        solcraft_environ->vmGlfwClass, solcraft_environ->method_glftSetWindowAttrib,
-        (jlong) solcraft_environ->showingWindow, attrib, value
+    // We cannot use solcraft_environ->runtimeJNIEnvPtr_JRE here because that environment is attached
+    // on the thread that loaded pojavexec (which is the thread that first references the GLFW class)
+    // But this method is only called from the Android UI thread
+
+    // Technically the better solution would be to have a permanently attached env pointer stored
+    // in environ for the Android UI thread but this is the only place that uses it
+    // (very rarely, only in lifecycle callbacks) so i dont care
+
+    JavaVM* jvm = solcraft_environ->runtimeJavaVMPtr;
+    JNIEnv *jvm_env = NULL;
+    jint env_result = (*jvm)->GetEnv(jvm, (void**)&jvm_env, JNI_VERSION_1_4);
+    if(env_result == JNI_EDETACHED) {
+        env_result = (*jvm)->AttachCurrentThread(jvm, &jvm_env, NULL);
+    }
+    if(env_result != JNI_OK) {
+        printf("input_bridge nativeSetWindowAttrib() JNI call failed: %i\n", env_result);
+        return;
+    }
+
+    (*jvm_env)->CallStaticVoidMethod(
+            jvm_env, solcraft_environ->vmGlfwClass,
+            solcraft_environ->method_glftSetWindowAttrib,
+            (jlong) solcraft_environ->showingWindow, attrib, value
     );
+
+    // Attaching every time is annoying, so stick the attachment to the Android GUI thread around
 }
 const static JNINativeMethod critical_fcns[] = {
         {"nativeSetUseInputStackQueue", "(Z)V", critical_set_stackqueue},
@@ -597,6 +542,7 @@ static bool tryCriticalNative(JNIEnv *env) {
     };
     jclass criticalNativeTest = (*env)->FindClass(env, "net/kdt/pojavlaunch/CriticalNativeTest");
     if(criticalNativeTest == NULL) {
+        LOGD("No CriticalNativeTest class found !");
         (*env)->ExceptionClear(env);
         return false;
     }
