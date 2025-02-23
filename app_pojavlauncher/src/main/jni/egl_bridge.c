@@ -70,7 +70,7 @@ void* egl_make_current(void* window);
 EXTERNAL_API void pojavTerminate() {
     printf("EGLBridge: Terminating\n");
 
-    switch (solcraft_environ->config_renderer) {
+    switch (pojav_environ->config_renderer) {
         case RENDERER_GL4ES: {
             eglMakeCurrent_p(potatoBridge.eglDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
             eglDestroySurface_p(potatoBridge.eglDisplay, potatoBridge.eglSurface);
@@ -91,14 +91,14 @@ EXTERNAL_API void pojavTerminate() {
 }
 
 JNIEXPORT void JNICALL Java_net_kdt_pojavlaunch_utils_JREUtils_setupBridgeWindow(JNIEnv* env, ABI_COMPAT jclass clazz, jobject surface) {
-    solcraft_environ->pojavWindow = ANativeWindow_fromSurface(env, surface);
+    pojav_environ->pojavWindow = ANativeWindow_fromSurface(env, surface);
     if(br_setup_window != NULL) br_setup_window();
 }
 
 
 JNIEXPORT void JNICALL
 Java_net_kdt_pojavlaunch_utils_JREUtils_releaseBridgeWindow(ABI_COMPAT JNIEnv *env, ABI_COMPAT jclass clazz) {
-    ANativeWindow_release(solcraft_environ->pojavWindow);
+    ANativeWindow_release(pojav_environ->pojavWindow);
 }
 
 /*If you don't want your renderer for
@@ -106,16 +106,16 @@ the Mesa class to crash in your launcher
 don't touch the code here
 */
 EXTERNAL_API void* pojavGetCurrentContext() {
-    if(solcraft_environ->config_renderer == RENDERER_VK_ZINK || solcraft_environ->config_renderer == RENDERER_GL4ES) {
+    if(pojav_environ->config_renderer == RENDERER_VK_ZINK || pojav_environ->config_renderer == RENDERER_GL4ES) {
         return br_get_current();
-    } else if(solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    } else if(pojav_environ->config_renderer == RENDERER_VIRGL) {
         return (void *)OSMesaGetCurrentContext_p();
     }
 }
 
 //Switches specifically provided for other renderers
 void loadSymbols() {
-    switch (solcraft_environ->config_renderer) {
+    switch (pojav_environ->config_renderer) {
         case RENDERER_VIRGL:
             dlsym_OSMesa();
             dlsym_EGL();
@@ -216,7 +216,7 @@ void load_vulkan() {
 }
 
 bool loadSymbolsVirGL() {
-    solcraft_environ->config_renderer = RENDERER_VIRGL;
+    pojav_environ->config_renderer = RENDERER_VIRGL;
     loadSymbols();
 
     char* fileName = calloc(1, 1024);
@@ -237,12 +237,12 @@ int pojavInitOpenGL() {
     // Only affects GL4ES as of now
     const char *forceVsync = getenv("FORCE_VSYNC");
     if (strcmp(forceVsync, "true") == 0)
-        solcraft_environ->force_vsync = true;
+        pojav_environ->force_vsync = true;
 
     // NOTE: Override for now.
     const char *renderer = getenv("POJAV_RENDERER");
     if (strncmp("virgl", renderer, 15) == 0) {
-        solcraft_environ->config_renderer = RENDERER_VIRGL;
+        pojav_environ->config_renderer = RENDERER_VIRGL;
         setenv("GALLIUM_DRIVER","virpipe",1);
 #ifndef ADRENO_POSSIBLE
         setenv("MESA_GL_VERSION_OVERRIDE", "3.3", 0);
@@ -254,17 +254,17 @@ int pojavInitOpenGL() {
         }
         loadSymbolsVirGL();
     } else if (strncmp("opengles", renderer, 8) == 0) {
-        solcraft_environ->config_renderer = RENDERER_GL4ES;
+        pojav_environ->config_renderer = RENDERER_GL4ES;
         set_gl_bridge_tbl();
     } else if (strcmp(renderer, "vulkan_zink") == 0 || strcmp(renderer, "vulkan_zink_standard") == 0) {
-        solcraft_environ->config_renderer = RENDERER_VK_ZINK;
+        pojav_environ->config_renderer = RENDERER_VK_ZINK;
         load_vulkan();
         setenv("MESA_LOADER_DRIVER_OVERRIDE","zink",1);
         setenv("GALLIUM_DRIVER","zink",1);
         set_osm_bridge_tbl();
     } else if (strcmp(renderer, "vulkan_zink_legacy") == 0) {
         setenv("POJAV_ZINK_PREFER_SYSTEM_DRIVER", "1", 1);
-        solcraft_environ->config_renderer = RENDERER_VK_ZINK;
+        pojav_environ->config_renderer = RENDERER_VK_ZINK;
         load_vulkan();
         setenv("MESA_LOADER_DRIVER_OVERRIDE","zink",1);
         setenv("GALLIUM_DRIVER","zink",1);
@@ -272,22 +272,22 @@ int pojavInitOpenGL() {
         setenv("MESA_GLSL_VERSION_OVERRIDE", "150",false);
         set_osm_bridge_tbl();
     } else if (strcmp(renderer, "malihw_panfrost") == 0) {
-        solcraft_environ->config_renderer = RENDERER_VK_ZINK;
+        pojav_environ->config_renderer = RENDERER_VK_ZINK;
         setenv("GALLIUM_DRIVER", "panfrost", 1);
         setenv("PAN_DEBUG","gofaster",1);
         set_osm_bridge_tbl();
     } else if (strcmp(renderer, "adrhw_freedreno") == 0) {
-        solcraft_environ->config_renderer = RENDERER_VK_ZINK;
+        pojav_environ->config_renderer = RENDERER_VK_ZINK;
         setenv("GALLIUM_DRIVER", "freedreno", 1);
         setenv("MESA_LOADER_DRIVER_OVERRIDE", "kgsl", 1);
         set_osm_bridge_tbl();
     }
-    if(solcraft_environ->config_renderer == RENDERER_VK_ZINK || solcraft_environ->config_renderer == RENDERER_GL4ES) {
+    if(pojav_environ->config_renderer == RENDERER_VK_ZINK || pojav_environ->config_renderer == RENDERER_GL4ES) {
         if(br_init()) {
             br_setup_window();
         }
     }
-    if (solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    if (pojav_environ->config_renderer == RENDERER_VIRGL) {
         if (potatoBridge.eglDisplay == NULL || potatoBridge.eglDisplay == EGL_NO_DISPLAY) {
             potatoBridge.eglDisplay = eglGetDisplay_p(EGL_DEFAULT_DISPLAY);
             if (potatoBridge.eglDisplay == EGL_NO_DISPLAY) {
@@ -297,7 +297,7 @@ int pojavInitOpenGL() {
         }
 
         printf("EGLBridge: Initializing\n");
-        // printf("EGLBridge: ANativeWindow pointer = %p\n", solcraft_environ->pojavWindow);
+        // printf("EGLBridge: ANativeWindow pointer = %p\n", pojav_environ->pojavWindow);
         //(*env)->ThrowNew(env,(*env)->FindClass(env,"java/lang/Exception"),"Trace exception");
         if (!eglInitialize_p(potatoBridge.eglDisplay, NULL, NULL)) {
             printf("EGLBridge: Error eglInitialize() failed: %s\n", eglGetError_p());
@@ -331,11 +331,11 @@ int pojavInitOpenGL() {
             return 0;
         }
 
-        ANativeWindow_setBuffersGeometry(solcraft_environ->pojavWindow, 0, 0, vid);
+        ANativeWindow_setBuffersGeometry(pojav_environ->pojavWindow, 0, 0, vid);
 
         eglBindAPI_p(EGL_OPENGL_ES_API);
 
-        potatoBridge.eglSurface = eglCreateWindowSurface_p(potatoBridge.eglDisplay, config, solcraft_environ->pojavWindow, NULL);
+        potatoBridge.eglSurface = eglCreateWindowSurface_p(potatoBridge.eglDisplay, config, pojav_environ->pojavWindow, NULL);
 
         if (!potatoBridge.eglSurface) {
             printf("EGLBridge: Error eglCreateWindowSurface failed: %p\n", eglGetError_p());
@@ -357,12 +357,12 @@ int pojavInitOpenGL() {
                potatoBridge.eglDisplay,
                potatoBridge.eglSurface
         );
-        if (solcraft_environ->config_renderer != RENDERER_VIRGL) {
+        if (pojav_environ->config_renderer != RENDERER_VIRGL) {
             return 1;
         }
     }
 
-    if (solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    if (pojav_environ->config_renderer == RENDERER_VIRGL) {
         // Init EGL context and vtest server
         const EGLint ctx_attribs[] = {
                 EGL_CONTEXT_CLIENT_VERSION, 3,
@@ -376,14 +376,14 @@ int pojavInitOpenGL() {
         usleep(100*1000); // need enough time for the server to init
     }
 
-    if (solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    if (pojav_environ->config_renderer == RENDERER_VIRGL) {
         if(OSMesaCreateContext_p == NULL) {
             printf("OSMDroid: %s\n",dlerror());
             return 0;
         }
-        printf("OSMDroid: width=%i;height=%i, reserving %i bytes for frame buffer\n", solcraft_environ->savedWidth, solcraft_environ->savedHeight,
-               solcraft_environ->savedWidth * 4 * solcraft_environ->savedHeight);
-        gbuffer = calloc(solcraft_environ->savedWidth *4, solcraft_environ->savedHeight +1);
+        printf("OSMDroid: width=%i;height=%i, reserving %i bytes for frame buffer\n", pojav_environ->savedWidth, pojav_environ->savedHeight,
+               pojav_environ->savedWidth * 4 * pojav_environ->savedHeight);
+        gbuffer = calloc(pojav_environ->savedWidth *4, pojav_environ->savedHeight +1);
         if (gbuffer) {
             printf("OSMDroid: created frame buffer\n");
             return 1;
@@ -399,11 +399,11 @@ int pojavInitOpenGL() {
 extern void updateMonitorSize(int width, int height);
 
 EXTERNAL_API int pojavInit() {
-    ANativeWindow_acquire(solcraft_environ->pojavWindow);
-    solcraft_environ->savedWidth = ANativeWindow_getWidth(solcraft_environ->pojavWindow);
-    solcraft_environ->savedHeight = ANativeWindow_getHeight(solcraft_environ->pojavWindow);
-    ANativeWindow_setBuffersGeometry(solcraft_environ->pojavWindow,solcraft_environ->savedWidth,solcraft_environ->savedHeight,AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM);
-    updateMonitorSize(solcraft_environ->savedWidth, solcraft_environ->savedHeight);
+    ANativeWindow_acquire(pojav_environ->pojavWindow);
+    pojav_environ->savedWidth = ANativeWindow_getWidth(pojav_environ->pojavWindow);
+    pojav_environ->savedHeight = ANativeWindow_getHeight(pojav_environ->pojavWindow);
+    ANativeWindow_setBuffersGeometry(pojav_environ->pojavWindow,pojav_environ->savedWidth,pojav_environ->savedHeight,AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM);
+    updateMonitorSize(pojav_environ->savedWidth, pojav_environ->savedHeight);
     pojavInitOpenGL();
     return 1;
 }
@@ -412,7 +412,7 @@ EXTERNAL_API void pojavSetWindowHint(int hint, int value) {
     if (hint != GLFW_CLIENT_API) return;
     switch (value) {
         case GLFW_NO_API:
-            solcraft_environ->config_renderer = RENDERER_VULKAN;
+            pojav_environ->config_renderer = RENDERER_VULKAN;
             /* Nothing to do: initialization is handled in Java-side */
             // pojavInitVulkan();
             break;
@@ -433,9 +433,9 @@ EXTERNAL_API void pojavSwapBuffers() {
     if (stopSwapBuffers) {
         return;
     }
-    if(solcraft_environ->config_renderer == RENDERER_VK_ZINK || solcraft_environ->config_renderer == RENDERER_GL4ES) {
+    if(pojav_environ->config_renderer == RENDERER_VK_ZINK || pojav_environ->config_renderer == RENDERER_GL4ES) {
         br_swap_buffers();
-    } else if(solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    } else if(pojav_environ->config_renderer == RENDERER_VIRGL) {
         glFinish_p();
         vtest_swap_buffers_p();
     }
@@ -455,7 +455,7 @@ void* egl_make_current(void* window) {
         printf("EGLBridge: eglMakeCurrent() succeed!\n");
     }
 
-    if (solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    if (pojav_environ->config_renderer == RENDERER_VIRGL) {
         printf("VirGL: vtest_main = %p\n", vtest_main_p);
         printf("VirGL: Calling VTest server's main function\n");
         vtest_main_p(3, (const char*[]){"vtest", "--no-loop-or-fork", "--use-gles", NULL, NULL});
@@ -464,11 +464,11 @@ void* egl_make_current(void* window) {
 
 EXTERNAL_API void pojavMakeCurrent(void* window) {
     if(getenv("POJAV_BIG_CORE_AFFINITY") != NULL) bigcore_set_affinity();
-    if(solcraft_environ->config_renderer == RENDERER_VK_ZINK || solcraft_environ->config_renderer == RENDERER_GL4ES) {
+    if(pojav_environ->config_renderer == RENDERER_VK_ZINK || pojav_environ->config_renderer == RENDERER_GL4ES) {
         br_make_current((basic_render_window_t*)window);
-    } else if(solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    } else if(pojav_environ->config_renderer == RENDERER_VIRGL) {
         printf("OSMDroid: making current\n");
-        OSMesaMakeCurrent_p((OSMesaContext)window,gbuffer,GL_UNSIGNED_BYTE,solcraft_environ->savedWidth,solcraft_environ->savedHeight);
+        OSMesaMakeCurrent_p((OSMesaContext)window,gbuffer,GL_UNSIGNED_BYTE,pojav_environ->savedWidth,pojav_environ->savedHeight);
         printf("OSMDroid: vendor: %s\n",glGetString_p(GL_VENDOR));
         printf("OSMDroid: renderer: %s\n",glGetString_p(GL_RENDERER));
         glClear_p(GL_COLOR_BUFFER_BIT);
@@ -484,13 +484,13 @@ EXTERNAL_API void pojavMakeCurrent(void* window) {
 }
 
 EXTERNAL_API void* pojavCreateContext(void* contextSrc) {
-    if (solcraft_environ->config_renderer == RENDERER_VULKAN) {
-        return (void *) solcraft_environ->pojavWindow;
+    if (pojav_environ->config_renderer == RENDERER_VULKAN) {
+        return (void *) pojav_environ->pojavWindow;
     }
 
-    if (solcraft_environ->config_renderer == RENDERER_VK_ZINK || solcraft_environ->config_renderer == RENDERER_GL4ES) {
+    if (pojav_environ->config_renderer == RENDERER_VK_ZINK || pojav_environ->config_renderer == RENDERER_GL4ES) {
         return br_init_context((basic_render_window_t*)contextSrc);
-    } else if (solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    } else if (pojav_environ->config_renderer == RENDERER_VIRGL) {
         pojavInitOpenGL();
         printf("OSMDroid: generating context\n");
         void* ctx = OSMesaCreateContext_p(OSMESA_RGBA,contextSrc);
@@ -515,7 +515,7 @@ Java_org_lwjgl_vulkan_VK_getVulkanDriverHandle(ABI_COMPAT JNIEnv *env, ABI_COMPA
 
 EXTERNAL_API JNIEXPORT void JNICALL
 Java_org_lwjgl_opengl_GL_nativeRegalMakeCurrent(JNIEnv *env, jclass clazz) {
-    if (solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    if (pojav_environ->config_renderer == RENDERER_VIRGL) {
         /*printf("Regal: making current");
     
         RegalMakeCurrent_func *RegalMakeCurrent = (RegalMakeCurrent_func *) dlsym(RTLD_DEFAULT, "RegalMakeCurrent");
@@ -528,25 +528,25 @@ Java_org_lwjgl_opengl_GL_nativeRegalMakeCurrent(JNIEnv *env, jclass clazz) {
 
 EXTERNAL_API JNIEXPORT jlong JNICALL
 Java_org_lwjgl_opengl_GL_getGraphicsBufferAddr(JNIEnv *env, jobject thiz) {
-    if (solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    if (pojav_environ->config_renderer == RENDERER_VIRGL) {
         return &gbuffer;
     }
 }
 
 EXTERNAL_API JNIEXPORT jintArray JNICALL
 Java_org_lwjgl_opengl_GL_getNativeWidthHeight(JNIEnv *env, jobject thiz) {
-    if (solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    if (pojav_environ->config_renderer == RENDERER_VIRGL) {
         jintArray ret = (*env)->NewIntArray(env,2);
-        jint arr[] = {solcraft_environ->savedWidth, solcraft_environ->savedHeight};
+        jint arr[] = {pojav_environ->savedWidth, pojav_environ->savedHeight};
         (*env)->SetIntArrayRegion(env,ret,0,2,arr);
         return ret;
     }
 }
 
 EXTERNAL_API void pojavSwapInterval(int interval) {
-    if(solcraft_environ->config_renderer == RENDERER_VK_ZINK || solcraft_environ->config_renderer == RENDERER_GL4ES) {
+    if(pojav_environ->config_renderer == RENDERER_VK_ZINK || pojav_environ->config_renderer == RENDERER_GL4ES) {
         br_swap_interval(interval);
-    } else if(solcraft_environ->config_renderer == RENDERER_VIRGL) {
+    } else if(pojav_environ->config_renderer == RENDERER_VIRGL) {
         eglSwapInterval_p(potatoBridge.eglDisplay, interval);
     }
 }

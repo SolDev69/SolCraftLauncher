@@ -28,7 +28,7 @@ typedef void GLFW_invoke_Key_func(void* window, int key, int scancode, int actio
 typedef void GLFW_invoke_MouseButton_func(void* window, int button, int action, int mods);
 typedef void GLFW_invoke_Scroll_func(void* window, double xoffset, double yoffset);
 
-struct solcraft_environ_s {
+struct pojav_environ_s {
     struct ANativeWindow* pojavWindow;
     basic_render_window_t* mainWindowBundle;
     int config_renderer;
@@ -70,6 +70,6 @@ struct solcraft_environ_s {
 
 #undef ADD_CALLBACK_WWIN
 };
-extern struct solcraft_environ_s *solcraft_environ;
+extern struct pojav_environ_s *pojav_environ;
 
 #endif //POJAVLAUNCHER_ENVIRON_H

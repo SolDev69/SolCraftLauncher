@@ -134,10 +134,10 @@ void gl_make_current(gl_render_window_t* bundle) {
         return;
     }
     bool hasSetMainWindow = false;
-    if(solcraft_environ->mainWindowBundle == NULL) {
-        solcraft_environ->mainWindowBundle = (basic_render_window_t*)bundle;
-        __android_log_print(ANDROID_LOG_INFO, g_LogTag, "Main window bundle is now %p", solcraft_environ->mainWindowBundle);
-        solcraft_environ->mainWindowBundle->newNativeSurface = solcraft_environ->pojavWindow;
+    if(pojav_environ->mainWindowBundle == NULL) {
+        pojav_environ->mainWindowBundle = (basic_render_window_t*)bundle;
+        __android_log_print(ANDROID_LOG_INFO, g_LogTag, "Main window bundle is now %p", pojav_environ->mainWindowBundle);
+        pojav_environ->mainWindowBundle->newNativeSurface = pojav_environ->pojavWindow;
         hasSetMainWindow = true;
     }
     __android_log_print(ANDROID_LOG_INFO, g_LogTag, "Making current, surface=%p, nativeSurface=%p, newNativeSurface=%p", bundle->surface, bundle->nativeSurface, bundle->newNativeSurface);
@@ -148,9 +148,9 @@ void gl_make_current(gl_render_window_t* bundle) {
         currentBundle = bundle;
     }else {
         if(hasSetMainWindow) {
-            solcraft_environ->mainWindowBundle->newNativeSurface = NULL;
-            gl_swap_surface((gl_render_window_t*)solcraft_environ->mainWindowBundle);
-            solcraft_environ->mainWindowBundle = NULL;
+            pojav_environ->mainWindowBundle->newNativeSurface = NULL;
+            gl_swap_surface((gl_render_window_t*)pojav_environ->mainWindowBundle);
+            pojav_environ->mainWindowBundle = NULL;
         }
         __android_log_print(ANDROID_LOG_ERROR, g_LogTag, "eglMakeCurrent returned with error: %04x", eglGetError_p());
     }
@@ -176,15 +176,15 @@ void gl_swap_buffers() {
 }
 
 void gl_setup_window() {
-    if(solcraft_environ->mainWindowBundle != NULL) {
+    if(pojav_environ->mainWindowBundle != NULL) {
         __android_log_print(ANDROID_LOG_INFO, g_LogTag, "Main window bundle is not NULL, changing state");
-        solcraft_environ->mainWindowBundle->state = STATE_RENDERER_NEW_WINDOW;
-        solcraft_environ->mainWindowBundle->newNativeSurface = solcraft_environ->pojavWindow;
+        pojav_environ->mainWindowBundle->state = STATE_RENDERER_NEW_WINDOW;
+        pojav_environ->mainWindowBundle->newNativeSurface = pojav_environ->pojavWindow;
     }
 }
 
 void gl_swap_interval(int swapInterval) {
-    if(solcraft_environ->force_vsync) swapInterval = 1;
+    if(pojav_environ->force_vsync) swapInterval = 1;
 
     eglSwapInterval_p(g_EglDisplay, swapInterval);
 }
