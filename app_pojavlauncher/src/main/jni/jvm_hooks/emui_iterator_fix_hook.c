@@ -13,7 +13,7 @@
  * (thus making the parent Java function return null). This is done to avoid using the LWJGL's default function,
  * which will hang the crappy EMUI linker by dlopen()ing inside of dl_iterate_phdr().
  * @return 0, to make the parent Java function return null immediately.
- * For reference: https://github.com/SolCraftLauncherTeam/lwjgl3/blob/fix_huawei_hang/modules/lwjgl/core/src/main/java/org/lwjgl/system/SharedLibraryUtil.java
+ * For reference: https://github.com/SolDev69/lwjgl3/blob/fix_huawei_hang/modules/lwjgl/core/src/main/java/org/lwjgl/system/SharedLibraryUtil.java
  */
 jint getLibraryPath_fix(__attribute__((unused)) JNIEnv *env,
                         __attribute__((unused)) jclass class,

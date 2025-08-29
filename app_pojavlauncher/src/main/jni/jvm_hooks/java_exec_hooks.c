@@ -26,7 +26,7 @@ static jbyteArray stringToBytes(JNIEnv *env, const char* string) {
 static void replaceLibPathInEnvBlock(JNIEnv *env, jbyteArray* envBlock, jint* envc, const char* directory) {
     static bool env_block_replacement_warning = false;
     if(*envBlock != NULL && !env_block_replacement_warning) {
-        printf("exec_hooks WARN: replaceLibPathInEnvBlock does not preserve original env. Please notify SolCraftLauncherTeam if you need that feature\n");
+        printf("exec_hooks WARN: replaceLibPathInEnvBlock does not preserve original env. Please notify SolDev69 if you need that feature\n");
         env_block_replacement_warning = true;
     }
     char envStr[1024];

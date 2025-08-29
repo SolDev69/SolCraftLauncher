@@ -6,29 +6,12 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/SolDev69/SolCraftLauncher)](https://github.com/SolDev69/SolCraftLauncher/actions)
 [![Discord](https://img.shields.io/discord/1199157907523117066.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.com/invite/qeVjdcU4CJ)
 
-SolCraftLauncher is a fork of SolCraftLauncher/Angel Aura Amethyst with more technical added features, new renderers, and some QOL improvements.
-
-
-
-<h1 align="center">Angel Aura Amethyst</h1>
-
-<img src="https://github.com/AngelAuraMC/Amethyst-Android/blob/v3_openjdk/app_pojavlauncher/src/main/assets/amethyst.png" align="left" width="130" height="130" alt="Amethyst logo">
-
-[![Android CI](https://github.com/AngelAuraMC/Amethyst-Android/workflows/Android%20CI/badge.svg)](https://github.com/AngelAuraMC/Amethyst-Android/actions)
-[![GitHub commit activity](https://img.shields.io/github/commit-activity/m/AngelAuraMC/Amethyst-Android)](https://github.com/AngelAuraMC/Amethyst-Android/actions)
-[![Crowdin](https://badges.crowdin.net/amethyst/localized.svg)](https://crowdin.com/project/amethyst)
-[![Discord](https://img.shields.io/discord/724163890803638273.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/98pZ8YY3Cq)
-
-*From [Boardwalk](https://github.com/zhuowei/Boardwalk)'s ashes and [SolCraftLauncher](https://github.com/SolCraftLauncherTeam/SolCraftLauncher)'s ruined reputation, here comes Amethyst!*
-
-Amethyst is a launcher that allows you to play Minecraft: Java Edition on your Android and [iOS](https://github.com/AngelAuraMC/Amethyst-iOS) devices.
-
-For more details, check out our [wiki](https://angelauramc.dev/wiki)!
+SolCraftLauncher is a fork of SolCraftLauncher/Angel Aura SCL with more technical added features, new renderers, and some QOL improvements.
 
 ## Table of Contents
 
 * [Introduction](#introduction)
-* [Getting Amethyst](#getting-amethyst)
+* [Getting SCL](#getting-SCL)
 * [Building](#building)
     * [Quick Build (Recommended)](#quick-build-recommended)
     * [Detailed Build](#detailed-build)
@@ -43,16 +26,16 @@ For more details, check out our [wiki](https://angelauramc.dev/wiki)!
 
 ## Introduction
 
-* Amethyst is a Minecraft: Java Edition launcher for Android and iOS based on [Boardwalk](https://github.com/zhuowei/Boardwalk) and [SolCraftLauncher](https://github.com/SolCraftLauncherTeam/SolCraftLauncher)
+* SCL is a Minecraft: Java Edition launcher for Android and iOS based on [Boardwalk](https://github.com/zhuowei/Boardwalk) and [SolCraftLauncher](https://github.com/SolDev69/SolCraftLauncher)
 * This launcher can launch almost all available Minecraft versions ranging from rd-132211 to 1.21 snapshots (including Combat Test versions)
 * Modding via Forge and Fabric are also supported.
-* This repository contains source code for Android. For iOS/iPadOS, check out [Amethyst-iOS](https://github.com/AngelAuraMC/Amethyst-iOS).
+* This repository contains source code for Android. For iOS/iPadOS, check out [SCL-iOS](https://github.com/AngelAuraMC/SCL-iOS).
 
-## Getting Amethyst
+## Getting SCL
 
-You can get Amethyst via two methods:
+You can get SCL via two methods:
 
-1. **Releases:** Download the prebuilt app from our [stable releases](https://github.com/AngelAuraMC/Amethyst-Android/releases) or [automatic builds](https://github.com/AngelAuraMC/Amethyst-Android/actions).
+1. **Releases:** Download the prebuilt app from our [stable releases](https://github.com/SolDev69/SolCraftLauncherreleases) or [automatic builds](https://github.com/SolDev69/SolCraftLauncheractions).
 2. **Build from Source:** Follow the [building instructions](#building) below.
 
 ## Building
@@ -61,7 +44,7 @@ You can get Amethyst via two methods:
 
 The easiest way to build SolCraftLauncher is to use the pre-built JREs provided by our CI.
 
-1. Clone the repository: `git clone --recursive https://github.com/AngelAuraMC/Amethyst-Android.git`
+1. Clone the repository: `git clone --recursive https://github.com/AngelAuraMC/SCL-Android.git`
 2. Build the launcher: `./gradlew :app_pojavlauncher:assembleDebug` (Use `gradlew.bat` on Windows)
 
 The built APK will be located in `app_pojavlauncher/build/outputs/apk/debug/`.
@@ -108,7 +91,7 @@ If you need more control over the build process, follow these steps:
 
 ## Known Issues
 
-See our [issue tracker](https://github.com/AngelAuraMC/Amethyst-Android/issues) for a list of known issues and their current status.
+See our [issue tracker](https://github.com/SolDev69/SolCraftLauncherissues) for a list of known issues and their current status.
 
 ## FAQ
 
@@ -116,7 +99,7 @@ See our [wiki](https://angelauramc.dev/wiki) for more information.
 
 ## Contributing
 
-Contributions are welcome! We welcome any type of contribution, not only code. For example, you can help improve the [wiki](https://AngelAuraMC.github.io/), contribute to the [translations](https://crowdin.com/project/amethyst), or submit bug reports and feature requests.
+Contributions are welcome! We welcome any type of contribution, not only code. For example, you can help improve the [wiki](https://AngelAuraMC.github.io/), contribute to the [translations](https://crowdin.com/project/SCL), or submit bug reports and feature requests.
 
 Any code change should be submitted as a pull request. The description should explain what the code does and give steps to execute it.
 
@@ -126,12 +109,12 @@ For support, please join our [Discord server](https://discord.com/invite/98pZ8YY
 
 ## License
 
-SolCraftLauncher is licensed under [GNU LGPLv3](https://github.com/AngelAuraMC/Amethyst-Android/blob/v3_openjdk/LICENSE).
+SolCraftLauncher is licensed under [GNU LGPLv3](https://github.com/SolDev69/SolCraftLauncherblob/v4_velvet/LICENSE).
 
 ## Credits & Dependencies
 
 * [Boardwalk](https://github.com/zhuowei/Boardwalk) (JVM Launcher): Unknown License/[Apache License 2.0](https://github.com/zhuowei/Boardwalk/blob/master/LICENSE) or GNU GPLv2.
-* [SolCraftLauncher](https://github.com/SolCraftLauncherTeam/SolCraftLauncher): [GLGPL](https://github.com/SolCraftLauncherTeam/SolCraftLauncher/blob/v3_openjdk/LICENSE)
+* [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher): [GLGPL](https://github.com/PojavLauncherTeam/PojavLauncher/blob/v3_openjdk/LICENSE)
 * Android Support Libraries: [Apache License 2.0](https://android.googlesource.com/platform/prebuilts/maven_repo/android/+/master/NOTICE.txt).
 * [GL4ES](https://github.com/AngelAuraMC/gl4es): [MIT License](https://github.com/ptitSeb/gl4es/blob/master/LICENSE).
 * [MobileGlues](https://github.com/MobileGL-Dev/MobileGlues): [LGPL-2.1 License](https://github.com/MobileGL-Dev/MobileGlues/blob/dev-es/LICENSE).
@@ -157,4 +140,4 @@ Future plans include:
 * Improving stability and performance.
 * Enhancing the mod installation experience.
 
-We welcome community feedback and suggestions for our roadmap.  Please feel free to open a feature request in our [issue tracker](https://github.com/AngelAuraMC/Amethyst-Android/issues).
+We welcome community feedback and suggestions for our roadmap.  Please feel free to open a feature request in our [issue tracker](https://github.com/SolDev69/SolCraftLauncherissues).

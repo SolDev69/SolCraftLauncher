@@ -1,7 +1,7 @@
 %s (Minecraft Java Launcher for Android), version %s by Tran Khanh Duy (based on "Boardwalk" app)<br>
 
 * License:<br>
- • This application is licensed under <a href="https://github.com/SolCraftLauncherTeam/SolCraftLauncher/blob/master/LICENSE">GNU GPLv3</a>.<br>
+ • This application is licensed under <a href="https://github.com/SolDev69/SolCraftLauncher/blob/master/LICENSE">GNU GPLv3</a>.<br>
  
 * Credits / Third party components and their licenses:<br>
  • Apache Commons Compress (unknown or Apache License 2.0).<br>
@@ -12,8 +12,8 @@
  • LWJGL: <a href="http://legacy.lwjgl.org/license.php.html">LWJGL 2's License</a>.<br><br>
  • pro-gradle: <a href="https://github.com/pro-grade/pro-grade/blob/master/LICENSE.txt">Apache License 2.0</a>.<br>
  • xHook: <a href="https://github.com/iqiyi/xHook/blob/master/LICENSE">Mixed licenses</a>.<br>
- • <a href="https://github.com/SolCraftLauncherTeam/SolCraftLauncher#credits--third-party-components-and-their-licenses">More (check at GitHub)</a>.
- • <a href="https://raw.githubusercontent.com/SolCraftLauncherTeam/SolCraftLauncher/v3_openjdk/GPLAY_PRIVACY_POLICY">Privacy policy</a>.
+ • <a href="https://github.com/SolDev69/SolCraftLauncher#credits--third-party-components-and-their-licenses">More (check at GitHub)</a>.
+ • <a href="https://raw.githubusercontent.com/SolDev69/SolCraftLauncher/v3_openjdk/GPLAY_PRIVACY_POLICY">Privacy policy</a>.
  • Thanks to <a href="https://mc-heads.net">MCHeads</a> for providing Minecraft avatars.
  
 * Notes:<br>

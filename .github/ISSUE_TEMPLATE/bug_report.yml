@@ -51,7 +51,7 @@ body:
         - **Device model**: Huawei P30 Pro 8/512G
         - **CPU architecture**: arm64 (can be arm64, arm, x86_64 or x86 depending on the device)
         - **Android version**: 10
-        - **SolCraftLauncher version**: (can be found in Android Apps settings, for example `dahlia-20230813-5e8842b-v3_openjdk`)
+        - **SolCraftLauncher version**: (can be found in Android Apps settings, for example `dahlia-20230813-5e8842b-v4_velvet`)
     value: |
         - Device model: 
         - CPU architecture: 
