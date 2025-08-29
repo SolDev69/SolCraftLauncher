@@ -40,7 +40,7 @@ jobs:
           workflow: build.yml
           path: app_pojavlauncher/src/main/assets/components/jre
           workflow_conclusion: success
-          repo: SolDev69/android-openjdk-build-multiarch
+          repo: MojoLauncher/android-openjdk-build-multiarch
           branch: buildjre8
           name: jre8-pojav
 
@@ -50,7 +50,7 @@ jobs:
           workflow: build.yml
           path: app_pojavlauncher/src/main/assets/components/jre-new
           workflow_conclusion: success
-          repo: SolDev69/android-openjdk-build-multiarch
+          repo: MojoLauncher/android-openjdk-build-multiarch
           branch: buildjre17-21
           name: jre17-pojav
 
@@ -60,7 +60,7 @@ jobs:
           workflow: build.yml
           path: app_pojavlauncher/src/main/assets/components/jre-21
           workflow_conclusion: success
-          repo: SolDev69/android-openjdk-build-multiarch
+          repo: MojoLauncher/android-openjdk-build-multiarch
           branch: buildjre17-21
           name: jre21-pojav
 
