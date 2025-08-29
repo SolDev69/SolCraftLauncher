@@ -260,7 +260,7 @@
     <string name="preference_category_miscellaneous">Overige instellingen</string>
     <string name="preference_category_video">Video-instellingen</string>
     <string name="notification_permission_dialog_title">Verzoek om toestemming</string>
-    <string name="notification_permission_dialog_text">PojavLauncher heeft toestemming nodig om meldingen te plaatsen om te voorkomen dat downloads van game/modpack stoppen wanneer je de app verlaat. Zonder deze toestemming kan Android je downloads afsluiten als je PojavLauncher in de achtergrondmodus plaatst.</string>
+    <string name="notification_permission_dialog_text">SolCraftLauncher heeft toestemming nodig om meldingen te plaatsen om te voorkomen dat downloads van game/modpack stoppen wanneer je de app verlaat. Zonder deze toestemming kan Android je downloads afsluiten als je SolCraftLauncher in de achtergrondmodus plaatst.</string>
     <string name="notification_permission_toast">U kunt later altijd van gedachten veranderen door naar Instellingen te gaan</string>
     <string name="preference_ask_for_notification_title">Meldingen toestaan</string>
     <string name="preference_ask_for_notification_description">Klik om de meldingsmachtiging opnieuw op te vragen, vereist voor game/modpack achtergrond downloads om correct te werken.</string>

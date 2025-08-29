@@ -171,7 +171,7 @@ public class JREUtils {
 
     public static void setJavaEnvironment(Activity activity, String jreHome) throws Throwable {
         Map<String, String> envMap = new ArrayMap<>();
-        envMap.put("POJAV_NATIVEDIR", NATIVE_LIB_DIR);
+        envMap.put("SOLCRAFT_NATIVEDIR", NATIVE_LIB_DIR);
         envMap.put("JAVA_HOME", jreHome);
         envMap.put("HOME", Tools.DIR_GAME_HOME);
         envMap.put("TMPDIR", Tools.DIR_CACHE.getAbsolutePath());
@@ -189,9 +189,9 @@ public class JREUtils {
         if(PREF_DUMP_SHADERS)
             envMap.put("LIBGL_VGPU_DUMP", "1");
         if(PREF_VSYNC_IN_ZINK)
-            envMap.put("POJAV_VSYNC_IN_ZINK", "1");
+            envMap.put("SOLCRAFT_VSYNC_IN_ZINK", "1");
         if(Tools.deviceHasHangingLinker())
-            envMap.put("POJAV_EMUI_ITERATOR_MITIGATE", "1");
+            envMap.put("SOLCRAFT_EMUI_ITERATOR_MITIGATE", "1");
 
 
         // The OPEN GL version is changed according
@@ -209,20 +209,20 @@ public class JREUtils {
         envMap.put("LD_LIBRARY_PATH", LD_LIBRARY_PATH);
         envMap.put("PATH", jreHome + "/bin:" + Os.getenv("PATH"));
         if(FFmpegPlugin.isAvailable) {
-            envMap.put("POJAV_FFMPEG_PATH", FFmpegPlugin.executablePath);
+            envMap.put("SOLCRAFT_FFMPEG_PATH", FFmpegPlugin.executablePath);
         }
 
         if(LOCAL_RENDERER != null) {
-            envMap.put("POJAV_RENDERER", LOCAL_RENDERER);
+            envMap.put("SOLCRAFT_RENDERER", LOCAL_RENDERER);
             if(LOCAL_RENDERER.equals("opengles3_ltw")) {
                 envMap.put("LIBGL_ES", "3");
-                envMap.put("POJAVEXEC_EGL","libltw.so"); // Use ANGLE EGL
+                envMap.put("SOLCRAFTEXEC_EGL","libltw.so"); // Use ANGLE EGL
             }
             if(LOCAL_RENDERER.equals("opengles_mobileglues")){
                 envMap.put("MG_DIR_PATH", Tools.DIR_DATA + "/MobileGlues");
             }
         }
-        if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("POJAV_BIG_CORE_AFFINITY", "1");
+        if(LauncherPreferences.PREF_BIG_CORE_AFFINITY) envMap.put("SOLCRAFT_BIG_CORE_AFFINITY", "1");
         envMap.put("AWTSTUB_WIDTH", Integer.toString(CallbackBridge.windowWidth > 0 ? CallbackBridge.windowWidth : CallbackBridge.physicalWidth));
         envMap.put("AWTSTUB_HEIGHT", Integer.toString(CallbackBridge.windowHeight > 0 ? CallbackBridge.windowHeight : CallbackBridge.physicalHeight));
 
@@ -244,7 +244,7 @@ public class JREUtils {
         }
 
         if(info.isAdreno() && !PREF_ZINK_PREFER_SYSTEM_DRIVER) {
-            envMap.put("POJAV_LOAD_TURNIP", "1");
+            envMap.put("SOLCRAFT_LOAD_TURNIP", "1");
         }
 
         readCustomEnv(envMap); // Must be last so it overrides anything the user sets for obvious reasons.

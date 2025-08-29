@@ -2,8 +2,8 @@
 // Created by maks on 24.09.2022.
 //
 
-#ifndef POJAVLAUNCHER_ENVIRON_H
-#define POJAVLAUNCHER_ENVIRON_H
+#ifndef SOLCRAFTLAUNCHER_ENVIRON_H
+#define SOLCRAFTLAUNCHER_ENVIRON_H
 
 #include <ctxbridges/common.h>
 #include <stdatomic.h>
@@ -78,4 +78,4 @@ struct pojav_environ_s {
 };
 extern struct pojav_environ_s *pojav_environ;
 
-#endif //POJAVLAUNCHER_ENVIRON_H
+#endif //SOLCRAFTLAUNCHER_ENVIRON_H

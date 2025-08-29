@@ -1,5 +1,5 @@
-#ifndef POJAVLAUNCHER_LOG_H
-#define POJAVLAUNCHER_LOG_H
+#ifndef SOLCRAFTLAUNCHER_LOG_H
+#define SOLCRAFTLAUNCHER_LOG_H
 
 #include <android/log.h>
 

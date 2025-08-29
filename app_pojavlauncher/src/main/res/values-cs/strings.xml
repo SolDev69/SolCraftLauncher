@@ -234,7 +234,7 @@
     <string name="preference_gyro_sample_rate_title">Vzorkovací kmitočet gyroskopu</string>
     <string name="preference_gyro_sample_rate_description">Zvyšte toto, máte-li problém s výkonem užívajíce gyroskopového ovládání.</string>
     <string name="microsoft_login_retry_later">Příliš mnoho požadavků, zkuste to znovu později.</string>
-    <string name="storage_required">PojavLauncher vyžaduje přípojené externí úložiště. Připojte jej prosím znovu a restartujte tuto aplikaci.</string>
+    <string name="storage_required">SolCraftLauncher vyžaduje přípojené externí úložiště. Připojte jej prosím znovu a restartujte tuto aplikaci.</string>
     <string name="mcl_setting_title_buttonallcaps">Zobrazovat pouze velká písmena na popiscích tlačítek</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Vypněte toto, chcete-li užívat malá písmena ve vlastních ovládání.</string>
     <string name="create_profile">Vytvořit nový profil</string>
@@ -321,7 +321,7 @@
     <string name="preference_category_miscellaneous">Jiná nastavení</string>
     <string name="preference_category_video">Nastavení videa</string>
     <string name="notification_permission_dialog_title">Žádost o oprávnění</string>
-    <string name="notification_permission_dialog_text">PojavLauncher vyžaduje oprávnění k odesílání oznámení, aby se zabránilo zastavení stahování hry/modpacku při opuštění aplikace. Bez tohoto oprávnění může Android přerušit vaše stahování, když přepnete PojavLauncher do režimu na pozadí.</string>
+    <string name="notification_permission_dialog_text">SolCraftLauncher vyžaduje oprávnění k odesílání oznámení, aby se zabránilo zastavení stahování hry/modpacku při opuštění aplikace. Bez tohoto oprávnění může Android přerušit vaše stahování, když přepnete SolCraftLauncher do režimu na pozadí.</string>
     <string name="notification_permission_toast">Později si můžete změnit svůj názor v nastavení</string>
     <string name="preference_ask_for_notification_title">Povolit oznámení</string>
     <string name="preference_ask_for_notification_description">Kliknutím znovu požádáte o oprávnění pro posílání oznámení, které je vyžadováno pro správné fungování stahování hry/modpacku na pozadí.</string>

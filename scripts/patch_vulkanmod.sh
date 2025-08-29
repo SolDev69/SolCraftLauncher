@@ -6,7 +6,7 @@ copy_libs() {
 
   # Extract natives
   mkdir -p linux/$1/org/lwjgl/{shaderc,vma}
-  wget -q https://nightly.link/PojavLauncherTeam/lwjgl3/workflows/build-android/3.3.1/lwjgl3-android-natives-$1.zip
+  wget -q https://nightly.link/SolCraftLauncherTeam/lwjgl3/workflows/build-android/3.3.1/lwjgl3-android-natives-$1.zip
   unzip lwjgl3-android-natives-$1.zip libshaderc.so liblwjgl_vma.so; rm lwjgl3-android-natives-$1.zip
   mv libshaderc.so linux/$1/org/lwjgl/shaderc/
   mv liblwjgl_vma.so linux/$1/org/lwjgl/vma/
@@ -31,7 +31,7 @@ unzip $1 'META-INF/jars/lwjgl-*-3.3.1-natives-linux.jar' META-INF/jars/lwjgl-vul
 
 # Overwrite lwjgl-vulkan.jar
 unzip META-INF/jars/lwjgl-vulkan-3.3.1.jar 'META-INF/*' fabric.mod.json -d lwjgl-vulkan
-wget -q https://nightly.link/PojavLauncherTeam/lwjgl3/workflows/build-android/3.3.1/lwjgl3-android-modules.zip
+wget -q https://nightly.link/SolCraftLauncherTeam/lwjgl3/workflows/build-android/3.3.1/lwjgl3-android-modules.zip
 unzip lwjgl3-android-modules.zip lwjgl-vulkan/lwjgl-vulkan.jar; rm lwjgl3-android-modules.zip
 mv lwjgl-vulkan/lwjgl-vulkan.jar META-INF/jars/lwjgl-vulkan-3.3.1.jar
 (cd lwjgl-vulkan && zip -r ../META-INF/jars/lwjgl-vulkan-3.3.1.jar META-INF fabric.mod.json)

@@ -3,8 +3,8 @@
 //
 #include <EGL//egl.h>
 #include <stdbool.h>
-#ifndef POJAVLAUNCHER_GL_BRIDGE_H
-#define POJAVLAUNCHER_GL_BRIDGE_H
+#ifndef SOLCRAFTLAUNCHER_GL_BRIDGE_H
+#define SOLCRAFTLAUNCHER_GL_BRIDGE_H
 
 typedef struct {
     char       state;
@@ -25,4 +25,4 @@ void gl_setup_window();
 void gl_swap_interval(int swapInterval);
 
 
-#endif //POJAVLAUNCHER_GL_BRIDGE_H
+#endif //SOLCRAFTLAUNCHER_GL_BRIDGE_H

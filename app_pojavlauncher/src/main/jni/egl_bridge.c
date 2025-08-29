@@ -100,8 +100,8 @@ EXTERNAL_API void* pojavGetCurrentContext() {
 //#define ADRENO_POSSIBLE
 #ifdef ADRENO_POSSIBLE
 void* load_turnip_vulkan() {
-    if(getenv("POJAV_LOAD_TURNIP") == NULL) return NULL;
-    const char* native_dir = getenv("POJAV_NATIVEDIR");
+    if(getenv("SOLCRAFT_LOAD_TURNIP") == NULL) return NULL;
+    const char* native_dir = getenv("SOLCRAFT_NATIVEDIR");
     const char* cache_dir = getenv("TMPDIR");
     if(!linker_ns_load(native_dir)) return NULL;
     void* linkerhook = linker_ns_dlopen("liblinkerhook.so", RTLD_LOCAL | RTLD_NOW);
@@ -162,7 +162,7 @@ int pojavInitOpenGL() {
         pojav_environ->force_vsync = true;
 
     // NOTE: Override for now.
-    const char *renderer = getenv("POJAV_RENDERER");
+    const char *renderer = getenv("SOLCRAFT_RENDERER");
     if (strncmp("opengles", renderer, 8) == 0) {
         pojav_environ->config_renderer = RENDERER_GL4ES;
         set_gl_bridge_tbl();

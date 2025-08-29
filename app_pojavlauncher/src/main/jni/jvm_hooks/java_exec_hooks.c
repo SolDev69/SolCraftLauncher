@@ -26,7 +26,7 @@ static jbyteArray stringToBytes(JNIEnv *env, const char* string) {
 static void replaceLibPathInEnvBlock(JNIEnv *env, jbyteArray* envBlock, jint* envc, const char* directory) {
     static bool env_block_replacement_warning = false;
     if(*envBlock != NULL && !env_block_replacement_warning) {
-        printf("exec_hooks WARN: replaceLibPathInEnvBlock does not preserve original env. Please notify PojavLauncherTeam if you need that feature\n");
+        printf("exec_hooks WARN: replaceLibPathInEnvBlock does not preserve original env. Please notify SolCraftLauncherTeam if you need that feature\n");
         env_block_replacement_warning = true;
     }
     char envStr[1024];
@@ -61,7 +61,7 @@ static jint hooked_ProcessImpl_forkAndExec(JNIEnv *env, jobject process, jint mo
 
         // Also add LD_LIBRARY_PATH and PATH for the lib in order to override the ones from the launcher, since
         // they may interfere with ffmpeg dependencies.
-        const char* ffmpeg_path = getenv("POJAV_FFMPEG_PATH");
+        const char* ffmpeg_path = getenv("SOLCRAFT_FFMPEG_PATH");
         if(ffmpeg_path != NULL) {
             replaceLibPathInEnvBlock(env, &envBlock, &envc, dirname(ffmpeg_path));
             prog = stringToBytes(env, ffmpeg_path);

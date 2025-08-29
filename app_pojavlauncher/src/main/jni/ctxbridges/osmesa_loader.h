@@ -2,8 +2,8 @@
 // Created by maks on 21.09.2022.
 //
 
-#ifndef POJAVLAUNCHER_OSMESA_LOADER_H
-#define POJAVLAUNCHER_OSMESA_LOADER_H
+#ifndef SOLCRAFTLAUNCHER_OSMESA_LOADER_H
+#define SOLCRAFTLAUNCHER_OSMESA_LOADER_H
 
 #include <GL/osmesa.h>
 #include <stdbool.h>
@@ -22,4 +22,4 @@ extern void (*glReadPixels_p) (GLint x, GLint y, GLsizei width, GLsizei height, 
 extern void* (*OSMesaGetProcAddress_p)(const char* funcName);
 
 bool dlsym_OSMesa();
-#endif //POJAVLAUNCHER_OSMESA_LOADER_H
+#endif //SOLCRAFTLAUNCHER_OSMESA_LOADER_H

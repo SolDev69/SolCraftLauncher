@@ -34,7 +34,7 @@ __eglMustCastToProperFunctionPointerType (*eglGetProcAddress_p) (const char *pro
 
 bool dlsym_EGL() {
     char* gles = getenv("LIBGL_GLES");
-    char* eglName = (strncmp(gles ? gles : "", "libGLESv2_angle.so", 18) == 0) ? "libEGL_angle.so" : getenv("POJAVEXEC_EGL");
+    char* eglName = (strncmp(gles ? gles : "", "libGLESv2_angle.so", 18) == 0) ? "libEGL_angle.so" : getenv("SOLCRAFTEXEC_EGL");
     void* dl_handle = loader_dlopen(eglName,"libEGL.so", RTLD_LOCAL|RTLD_LAZY);
     if(dl_handle == NULL) return false;
     eglGetProcAddress_p = dlsym(dl_handle, "eglGetProcAddress");

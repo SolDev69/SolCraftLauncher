@@ -2,8 +2,8 @@
 // Created by maks on 23.01.2025.
 //
 
-#ifndef POJAVLAUNCHER_NATIVE_HOOKS_H
-#define POJAVLAUNCHER_NATIVE_HOOKS_H
+#ifndef SOLCRAFTLAUNCHER_NATIVE_HOOKS_H
+#define SOLCRAFTLAUNCHER_NATIVE_HOOKS_H
 
 #include <bytehook.h>
 
@@ -12,4 +12,4 @@ typedef bytehook_stub_t (*bytehook_hook_all_t)(const char *callee_path_name, con
 
 void create_chmod_hooks(bytehook_hook_all_t bytehook_hook_all_p);
 
-#endif //POJAVLAUNCHER_NATIVE_HOOKS_H
+#endif //SOLCRAFTLAUNCHER_NATIVE_HOOKS_H

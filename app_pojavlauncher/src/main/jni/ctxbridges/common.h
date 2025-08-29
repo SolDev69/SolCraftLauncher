@@ -2,8 +2,8 @@
 // Created by maks on 18.10.2023.
 //
 
-#ifndef POJAVLAUNCHER_COMMON_H
-#define POJAVLAUNCHER_COMMON_H
+#ifndef SOLCRAFTLAUNCHER_COMMON_H
+#define SOLCRAFTLAUNCHER_COMMON_H
 
 #define STATE_RENDERER_ALIVE 0
 #define STATE_RENDERER_NEW_WINDOW 1
@@ -14,4 +14,4 @@ typedef struct {
     struct ANativeWindow *newNativeSurface;
 } basic_render_window_t;
 
-#endif //POJAVLAUNCHER_COMMON_H
+#endif //SOLCRAFTLAUNCHER_COMMON_H

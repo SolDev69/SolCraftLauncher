@@ -36,7 +36,7 @@ static void custom_atexit() {
 static void create_hooks(bytehook_hook_all_t bytehook_hook_all_p) {
     bytehook_stub_t stub_exit = bytehook_hook_all_p(NULL, "exit", &custom_exit, NULL, NULL);
     LOGI("Successfully initialized exit hook, stub: %p", stub_exit);
-    // Only apply chmod hooks on devices where the game directory is in games/PojavLauncher
+    // Only apply chmod hooks on devices where the game directory is in games/SolCraftLauncher
     // which is below API 29
     if(android_get_device_api_level() < 29) {
         create_chmod_hooks(bytehook_hook_all_p);

@@ -234,7 +234,7 @@
     <string name="preference_gyro_sample_rate_title">Tốc độ lấy mẫu con quay hồi chuyển</string>
     <string name="preference_gyro_sample_rate_description">..</string>
     <string name="microsoft_login_retry_later">Có quá nhiều yêu cầu, vui lòng thử lại sau.</string>
-    <string name="storage_required">PojavLauncher cần kho dữ liệu bên ngoài để gắn vào. Vui lòng kết nối lại và khởi động lại ứng dụng.</string>
+    <string name="storage_required">SolCraftLauncher cần kho dữ liệu bên ngoài để gắn vào. Vui lòng kết nối lại và khởi động lại ứng dụng.</string>
     <string name="mcl_setting_title_buttonallcaps">Chỉ được dùng những chữ cái in hoa trong các nhãn nút</string>
     <string name="mcl_setting_subtitle_buttonallcaps">Tắt đi nếu bạn muốn sử dụng chữ cái thường trong mục điều khiển.</string>
     <string name="create_profile">Tạo cấu hình mới</string>
@@ -324,7 +324,7 @@ Nếu bạn muốn sử dụng nguồn tải xuống chính thức, nhấn vào 
     <string name="preference_category_miscellaneous">Các cài đặt khác</string>
     <string name="preference_category_video">Cài Đặt Đồ Họa</string>
     <string name="notification_permission_dialog_title">Yêu Cầu Quyền Truy Cập</string>
-    <string name="notification_permission_dialog_text">PojavLauncher yêu cầu quyền để gửi thông báo để ngăn chặn trò chơi/modpacks tải xuống mà không dừng lại khi bạn rời khỏi ứng dụng. Nếu không cấp quyền, Android có thể ngắt quá trình tải khi bạn để PojavLauncher ở chế độ nền.</string>
+    <string name="notification_permission_dialog_text">SolCraftLauncher yêu cầu quyền để gửi thông báo để ngăn chặn trò chơi/modpacks tải xuống mà không dừng lại khi bạn rời khỏi ứng dụng. Nếu không cấp quyền, Android có thể ngắt quá trình tải khi bạn để SolCraftLauncher ở chế độ nền.</string>
     <string name="notification_permission_toast">Bạn luôn có thể thay đổi ý định của mình bằng cách vào Cài đặt</string>
     <string name="preference_ask_for_notification_title">Cho phép Gửi thông báo</string>
     <string name="preference_ask_for_notification_description">Nhấp để yêu cầu lại quyền thông báo, điều này là cần thiết để trò chơi/gói tích hợp tải xuống bình thường ở chế độ nền.</string>

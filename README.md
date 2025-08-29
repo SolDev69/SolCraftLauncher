@@ -6,7 +6,7 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/m/SolDev69/SolCraftLauncher)](https://github.com/SolDev69/SolCraftLauncher/actions)
 [![Discord](https://img.shields.io/discord/1199157907523117066.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.com/invite/qeVjdcU4CJ)
 
-SolCraftLauncher is a fork of PojavLauncher/Angel Aura Amethyst with more technical added features, new renderers, and some QOL improvements.
+SolCraftLauncher is a fork of SolCraftLauncher/Angel Aura Amethyst with more technical added features, new renderers, and some QOL improvements.
 
 
 
@@ -19,7 +19,7 @@ SolCraftLauncher is a fork of PojavLauncher/Angel Aura Amethyst with more techni
 [![Crowdin](https://badges.crowdin.net/amethyst/localized.svg)](https://crowdin.com/project/amethyst)
 [![Discord](https://img.shields.io/discord/724163890803638273.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/98pZ8YY3Cq)
 
-*From [Boardwalk](https://github.com/zhuowei/Boardwalk)'s ashes and [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher)'s ruined reputation, here comes Amethyst!*
+*From [Boardwalk](https://github.com/zhuowei/Boardwalk)'s ashes and [SolCraftLauncher](https://github.com/SolCraftLauncherTeam/SolCraftLauncher)'s ruined reputation, here comes Amethyst!*
 
 Amethyst is a launcher that allows you to play Minecraft: Java Edition on your Android and [iOS](https://github.com/AngelAuraMC/Amethyst-iOS) devices.
 
@@ -43,7 +43,7 @@ For more details, check out our [wiki](https://angelauramc.dev/wiki)!
 
 ## Introduction
 
-* Amethyst is a Minecraft: Java Edition launcher for Android and iOS based on [Boardwalk](https://github.com/zhuowei/Boardwalk) and [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher)
+* Amethyst is a Minecraft: Java Edition launcher for Android and iOS based on [Boardwalk](https://github.com/zhuowei/Boardwalk) and [SolCraftLauncher](https://github.com/SolCraftLauncherTeam/SolCraftLauncher)
 * This launcher can launch almost all available Minecraft versions ranging from rd-132211 to 1.21 snapshots (including Combat Test versions)
 * Modding via Forge and Fabric are also supported.
 * This repository contains source code for Android. For iOS/iPadOS, check out [Amethyst-iOS](https://github.com/AngelAuraMC/Amethyst-iOS).
@@ -59,7 +59,7 @@ You can get Amethyst via two methods:
 
 ### Quick Build (Recommended)
 
-The easiest way to build PojavLauncher is to use the pre-built JREs provided by our CI.
+The easiest way to build SolCraftLauncher is to use the pre-built JREs provided by our CI.
 
 1. Clone the repository: `git clone --recursive https://github.com/AngelAuraMC/Amethyst-Android.git`
 2. Build the launcher: `./gradlew :app_pojavlauncher:assembleDebug` (Use `gradlew.bat` on Windows)
@@ -126,12 +126,12 @@ For support, please join our [Discord server](https://discord.com/invite/98pZ8YY
 
 ## License
 
-PojavLauncher is licensed under [GNU LGPLv3](https://github.com/AngelAuraMC/Amethyst-Android/blob/v3_openjdk/LICENSE).
+SolCraftLauncher is licensed under [GNU LGPLv3](https://github.com/AngelAuraMC/Amethyst-Android/blob/v3_openjdk/LICENSE).
 
 ## Credits & Dependencies
 
 * [Boardwalk](https://github.com/zhuowei/Boardwalk) (JVM Launcher): Unknown License/[Apache License 2.0](https://github.com/zhuowei/Boardwalk/blob/master/LICENSE) or GNU GPLv2.
-* [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher): [GLGPL](https://github.com/PojavLauncherTeam/PojavLauncher/blob/v3_openjdk/LICENSE)
+* [SolCraftLauncher](https://github.com/SolCraftLauncherTeam/SolCraftLauncher): [GLGPL](https://github.com/SolCraftLauncherTeam/SolCraftLauncher/blob/v3_openjdk/LICENSE)
 * Android Support Libraries: [Apache License 2.0](https://android.googlesource.com/platform/prebuilts/maven_repo/android/+/master/NOTICE.txt).
 * [GL4ES](https://github.com/AngelAuraMC/gl4es): [MIT License](https://github.com/ptitSeb/gl4es/blob/master/LICENSE).
 * [MobileGlues](https://github.com/MobileGL-Dev/MobileGlues): [LGPL-2.1 License](https://github.com/MobileGL-Dev/MobileGlues/blob/dev-es/LICENSE).
