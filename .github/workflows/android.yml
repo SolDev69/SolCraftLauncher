@@ -34,6 +34,7 @@ jobs:
           cd app_pojavlauncher/libs
           wget https://nightly.link/MojoLauncher/LTW/actions/runs/19860081252/output-aar.zip
           unzip output-aar.zip
+          rm output-aar.zip
           
       - name: Get JRE 8
         uses: dawidd6/action-download-artifact@v9
