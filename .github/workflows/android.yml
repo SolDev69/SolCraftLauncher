@@ -32,8 +32,9 @@ jobs:
         run: |
           apt update && apt install wget
           cd app_pojavlauncher/libs
-          wget https://github.com/PojavLauncherTeam/LTW/releases/latest/download/ltw-release.aar
-
+          wget https://nightly.link/MojoLauncher/LTW/actions/runs/19860081252/output-aar.zip
+          unzip output-aar.zip
+          
       - name: Get JRE 8
         uses: dawidd6/action-download-artifact@v9
         with:
