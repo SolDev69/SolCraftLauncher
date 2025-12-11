@@ -22,6 +22,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.oracle.dalvik.*;
 import java.io.*;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import net.kdt.pojavlaunch.*;
 import net.kdt.pojavlaunch.extra.ExtraConstants;
 import net.kdt.pojavlaunch.extra.ExtraCore;
