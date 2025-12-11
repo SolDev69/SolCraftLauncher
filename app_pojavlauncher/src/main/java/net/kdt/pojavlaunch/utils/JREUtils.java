@@ -280,6 +280,29 @@ public class JREUtils {
             reader.close();
         }
     }
+
+    // Move to it's own function, this gets the allocated ram as an int.
+    static int getAllocatedMemory(List<String> userArgs) {
+        for (String s : userArgs)
+            if (s.contains("Xmx")) {
+                Matcher matcher = Pattern.compile("\\d+").matcher(s);
+
+                // .find() to prevents IllegalStateException
+                if (matcher.find()) {
+                    int multiplier = s.charAt(s.indexOf(matcher.group()) + 1) == 'G' ? 1024 : 1;
+                    return (Integer.valueOf(matcher.group()) * multiplier);
+                }
+            }
+        return 0;
+    }
+
+    static boolean isUsingCustomMem(List<String> userArgs) {
+        for (String s : userArgs)
+            if (s.contains("Xmx") || s.contains("Xms"))
+                return true;
+        return false;
+    }
+
     public static void launchJavaVM(final AppCompatActivity activity, final Runtime runtime, File gameDirectory, final List<String> JVMArgs, final String userArgsString) throws Throwable {
         String runtimeHome = MultiRTUtils.getRuntimeHome(runtime.name).getAbsolutePath();
 
@@ -291,11 +314,8 @@ public class JREUtils {
         List<String> userArgs = getJavaArgs(activity, runtimeHome, userArgsString);
 
         //Remove arguments that can interfere with the good working of the launcher
-        purgeArg(userArgs,"-Xms");
-        purgeArg(userArgs,"-Xmx");
         purgeArg(userArgs,"-d32");
         purgeArg(userArgs,"-d64");
-        purgeArg(userArgs, "-Xint");
         purgeArg(userArgs, "-XX:+UseTransparentHugePages");
         purgeArg(userArgs, "-XX:+UseLargePagesInMetaspace");
         purgeArg(userArgs, "-XX:+UseLargePages");
@@ -306,8 +326,10 @@ public class JREUtils {
         purgeArg(userArgs, "-XX:ActiveProcessorCount");
 
         //Add automatically generated args
-        userArgs.add("-Xms" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
-        userArgs.add("-Xmx" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
+        if (!isUsingCustomMem(userArgs)) {
+            userArgs.add("-Xms" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
+            userArgs.add("-Xmx" + LauncherPreferences.PREF_RAM_ALLOCATION + "M");
+        }
         if(LOCAL_RENDERER != null) userArgs.add("-Dorg.lwjgl.opengl.libname=" + graphicsLib);
 
         // Force LWJGL to use the Freetype library intended for it, instead of using the one
@@ -318,7 +340,7 @@ public class JREUtils {
         userArgs.add("-XX:ActiveProcessorCount=" + java.lang.Runtime.getRuntime().availableProcessors());
 
         userArgs.addAll(JVMArgs);
-        activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,LauncherPreferences.PREF_RAM_ALLOCATION), Toast.LENGTH_SHORT).show());
+        activity.runOnUiThread(() -> Toast.makeText(activity, activity.getString(R.string.autoram_info_msg,getAllocatedMemory(userArgs)), Toast.LENGTH_SHORT).show());
         System.out.println(JVMArgs);
 
         initJavaRuntime(runtimeHome);
