@@ -1,3 +1,6 @@
+Support ended on May 31st, 2026.
+Please use Amethyst Launcher or MojoLauncher.
+
 <H1 align="center">SolCraftLauncher</H1>
 
 <img src="https://github.com/SolDev69/SolCraftLauncher/blob/v3_sol/app_pojavlauncher/src/main/assets/solcraftlauncher.png" align="left" width="130" height="150" alt="SolCraftLauncher logo">
