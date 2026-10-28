@@ -61,8 +61,8 @@ public class MesaRenderSpec implements RenderSpec {
             // This is needed because mobile drivers often don't implement required features for zink
             // hence making it fall back to OpenGL 2.1 and break the modern game completely
             // We don't care much about passing CTS hence this is fine
-            envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
-            envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
+            // envMap.put("MESA_GLSL_VERSION_OVERRIDE", "460");
+            // envMap.put("MESA_GL_VERSION_OVERRIDE", "4.6");
             super.setupEnvironment(context, envMap);
         }
         public boolean setupRenderer() {
