@@ -168,6 +168,8 @@ public class GameRenderer {
 
         Driver driver = DriverManager.getPreferredDriver();
         File root = DriverManager.getDriverRoot(driver);
+        File config = new File(Tools.DIR_GAME_HOME, "qgl_config.txt");
+        if(config.exists() && config.isFile()) MojoExec.setQglConfigPath(config.getAbsolutePath());
         MojoExec.configureCustomVulkanDriver(driver.getMainLibrary(), root == null ? null : root.getAbsolutePath());
     }
 }
